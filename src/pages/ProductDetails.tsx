@@ -7,6 +7,8 @@ import { Product, fetchProductById } from "@/state/product/product-slice";
 import { AppDispatch, RootState } from "@/state/store";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
+import { addToCart } from "@/state/cart/cart-slice";
+import Sidebar from "@/components/Sidebar";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -36,10 +38,20 @@ const ProductDetails = () => {
             <h1 className="text-2xl font-bold">{product.name}</h1>
             <p>{product.description}</p>
             <p className="text-lg font-semibold">${product.price}</p>
-            <Button>Add to cart</Button>
+            <Button
+              onClick={() =>
+                dispatch(
+                  addToCart({ userId: "", productId: product._id, quantity: 1 })
+                )
+              }
+            >
+              Add to cart
+            </Button>
           </div>
         </div>
       )}
+
+      <Sidebar />
     </div>
   );
 };

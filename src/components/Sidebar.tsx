@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from "@/state/store";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
@@ -19,6 +19,10 @@ const Sidebar = () => {
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const content = useSelector((state: RootState) => state.sidebar.content);
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    console.log("loading sidebar.....");
+  }, [isOpen]);
 
   return (
     <Sheet open={isOpen} onOpenChange={() => dispatch(toggle())}>

@@ -29,6 +29,8 @@ const ProductList = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    console.log("fetching products....");
+
     dispatch(fetchProducts({ page, pageSize: 10 }));
   }, [page]);
 

@@ -1,7 +1,7 @@
+import AuthDialog from "@/components/AuthDialog";
 import Navbar from "@/components/Navbar";
 import ProductList from "@/components/ProductList";
-import { Sidebar } from "lucide-react";
-import React from "react";
+import Sidebar from "@/components/Sidebar";
 
 const Home = () => {
   return (
@@ -9,6 +9,7 @@ const Home = () => {
       <Navbar />
       <ProductList />
       <Sidebar />
+      <AuthDialog />
     </div>
   );
 };
