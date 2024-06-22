@@ -17,6 +17,12 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sg: ['Space Grotesk', 'sans-serif'],
+        sgb: ['Space Grotesk Bold', 'sans-serif'],
+        sgmb: ['Space Grotesk Semi Bold', 'sans-serif'],
+
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -74,4 +80,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

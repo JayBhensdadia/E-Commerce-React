@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 export interface Product {
-    id: string,
+    _id: string,
     name: string,
     description: string,
     price: number,
@@ -13,12 +13,14 @@ export interface Product {
 interface ProductsState {
     value: Product[];
     totalPages: Number;
+    selectedProduct: Product | null | undefined;
 }
 
 
 const initialState: ProductsState = {
     value: [],
-    totalPages: 0
+    totalPages: 0,
+    selectedProduct: null
 };
 
 
@@ -31,6 +33,10 @@ export const productSlice = createSlice({
             state.value = action.payload.list;
             state.totalPages = action.payload.totalPages;
 
+        });
+
+        builder.addCase(fetchProductById.fulfilled, (state, action) => {
+            state.selectedProduct = action.payload;
         });
     }
 });
@@ -47,6 +53,20 @@ export const fetchProducts = createAsyncThunk(
         });
 
         return { list: response.data['products'], totalPages: response.data['totalPages'] };
+    }
+);
+
+
+export const fetchProductById = createAsyncThunk(
+    'products/fetchProductById',
+    async (id: string) => {
+        const response = await axios({
+            method: 'get',
+            url: `http://localhost:8080/api/product/${id}`,
+            withCredentials: true
+        });
+
+        return response.data['product'];
     }
 );
 

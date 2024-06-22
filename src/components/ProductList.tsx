@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
   const products = useSelector((state: RootState) => state.products.value);
@@ -31,6 +32,8 @@ const ProductList = () => {
     dispatch(fetchProducts({ page, pageSize: 10 }));
   }, [page]);
 
+  const navigate = useNavigate();
+
   //   const pageRange = Lodash.range(1, totalPages as number);
 
   return (
@@ -38,7 +41,7 @@ const ProductList = () => {
       <div className="grid grid-cols-1 self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
         {products.map((product) => {
           return (
-            <div key={product.id}>
+            <div key={product._id} onClick={() => navigate(`/${product._id}`)}>
               <Product
                 name={product.name}
                 description={product.description}
@@ -56,7 +59,7 @@ const ProductList = () => {
           onClick={() => setPage((prev) => prev - 1)}
           disabled={page === 1 ? true : false}
         >
-          <PaginationPrevious />
+          <PaginationPrevious className="font-sg" />
         </Button>
 
         <Button
@@ -64,7 +67,7 @@ const ProductList = () => {
           onClick={() => setPage((prev) => prev + 1)}
           disabled={page === totalPages ? true : false}
         >
-          <PaginationNext />
+          <PaginationNext className="font-sg" />
         </Button>
       </div>
     </div>

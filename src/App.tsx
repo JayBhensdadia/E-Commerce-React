@@ -1,14 +1,13 @@
-import Navbar from "./components/Navbar";
-import ProductList from "./components/ProductList";
-import Sidebar from "./components/Sidebar";
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import ProductDetails from "./pages/ProductDetails";
 
 const App = () => {
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center dark:bg-[#1F1F1F] no-scrollbar">
-      <Navbar />
-      <ProductList />
-      <Sidebar />
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/:id" element={<ProductDetails />} />
+    </Routes>
   );
 };
 
