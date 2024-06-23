@@ -55,57 +55,7 @@ const CartSidebar = () => {
 
       <div className="h-full flex flex-col overflow-scroll no-scrollbar py-5 gap-3">
         {items.map((item) => {
-          return (
-            <CartItem cartItem={item} />
-            // <div key={item.productId} className="flex flex-col border-2">
-            //   <p>{item.productId}</p>
-            //   <p>{item.userId}</p>
-            //   <p>{item.quantity}</p>
-            //   <Button
-            //     variant="destructive"
-            //     onClick={async () => {
-            //       if (user) {
-            //         await dispatch(
-            //           deleteCartItemAsync({
-            //             itemId: item.productId,
-            //             userId: user._id,
-            //           })
-            //         );
-            //         await dispatch(fetchCartItems());
-            //         return;
-            //       } else {
-            //         dispatch(deleteProductFromCart(item.productId));
-            //         return;
-            //       }
-            //     }}
-            //   >
-            //     delete item
-            //   </Button>
-
-            //   <Button
-            //     variant="destructive"
-            //     onClick={async () => {
-            //       if (user) {
-            //         await dispatch(
-            //           reduceCartItemQuantityAsync({
-            //             itemId: item.productId,
-            //             userId: user._id,
-            //             quantity: item.quantity,
-            //           })
-            //         );
-
-            //         await dispatch(fetchCartItems());
-            //         return;
-            //       } else {
-            //         dispatch(reduceQuantity(item.productId));
-            //         return;
-            //       }
-            //     }}
-            //   >
-            //     -
-            //   </Button>
-            // </div>
-          );
+          return <CartItem cartItem={item} />;
         })}
 
         {items.length !== 0 && (

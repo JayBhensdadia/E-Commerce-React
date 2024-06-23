@@ -4,6 +4,8 @@ import sidebarReducer from './sidebar/sidebar-slice';
 import cartReducer from './cart/cart-slice';
 import userReducer from './user/user-slice';
 import authReducer from './auth/auth-slice';
+import purchaseSuccessReducer from './purchase-success/purchase-success-slice';
+
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +13,8 @@ export const store = configureStore({
         sidebar: sidebarReducer,
         cart: cartReducer,
         user: userReducer,
-        auth: authReducer
+        auth: authReducer,
+        purchaseSuccess: purchaseSuccessReducer
     }
 });
 

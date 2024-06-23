@@ -1,5 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "sonner";
 
 export interface CartItem {
     userId: string;
@@ -45,6 +46,8 @@ export const cartSlice = createSlice({
 
                 localStorage.setItem('jb-cart', JSON.stringify(state.items));
 
+                toast('item added to cart!');
+
             }
 
 
@@ -58,6 +61,7 @@ export const cartSlice = createSlice({
         deleteProductFromCart: (state, action: PayloadAction<string>) => {
             state.items = state.items.filter((item) => item.productId !== action.payload);
             localStorage.setItem("jb-cart", JSON.stringify(state.items));
+            toast('item deleted from cart');
         },
 
         reduceQuantity: (state, action: PayloadAction<string>) => {
@@ -69,12 +73,15 @@ export const cartSlice = createSlice({
                 }
                 reducingItem.quantity -= 1;
             }
+            toast('item quantity reduced from cart');
         }
     },
     extraReducers: (builder) => {
         builder.addCase(syncCart.fulfilled, (state, action) => {
             // state.items = action.payload;
             console.log('car synced!!');
+            toast('cart synced with database');
+
 
         }).addCase(fetchCartItems.fulfilled, (state, action) => {
             console.log('database cart data loaded!');
@@ -82,12 +89,15 @@ export const cartSlice = createSlice({
             state.items = action.payload;
         }).addCase(addToCartAsync.fulfilled, (state, action) => {
             console.log('success : asyc add to cart');
+            toast('item added to cart');
 
         }).addCase(deleteCartItemAsync.fulfilled, (state, action) => {
             console.log('success: async delete to cart');
+            toast('item deleted from cart');
 
         }).addCase(reduceCartItemQuantityAsync.fulfilled, (state, action) => {
             console.log('success: asycn reduce quantity');
+            toast('item quantity reduced from cart');
 
         });
     }

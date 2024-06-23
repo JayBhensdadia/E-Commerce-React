@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SheetContent,
   SheetHeader,
@@ -7,37 +7,97 @@ import {
 } from "./ui/sheet";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/state/store";
-import { useDispatch } from "react-redux";
-import { changeContent, toggle } from "@/state/sidebar/sidebar-slice";
-import { toggleAuth } from "@/state/auth/auth-slice";
 import { Button } from "./ui/button";
-import { fetchUserDetails } from "@/state/user/user-slice";
+import CartItem from "./CartItem";
+import { LoaderCircle, Truck } from "lucide-react";
+import axios from "axios";
+import { type Product } from "@/state/product/product-slice";
+import { toast } from "sonner";
+import { CardsPaymentMethod } from "./PaymentMethod";
+import { useDispatch } from "react-redux";
+import { togglePurchaseSuccess } from "@/state/purchase-success/purchase-success-slice";
+import { toggle } from "@/state/sidebar/sidebar-slice";
+import { clearMyCartAsyc } from "@/state/user/user-slice";
+import { fetchCartItems } from "@/state/cart/cart-slice";
 
 const CheckoutSidebar = () => {
-  // const user = useSelector((state: RootState) => state.user.data);
-  // const dispatch = useDispatch<AppDispatch>();
+  const items = useSelector((state: RootState) => state.cart.items);
+  const [total, setTotal] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   const load = async () => {
-  //     await dispatch(fetchUserDetails());
-  //     if (!user) {
-  //       await dispatch(toggle());
-  //       await dispatch(toggleAuth());
-  //     } else {
-  //       await dispatch(changeContent("checkout"));
-  //     }
-  //   };
+  const dispatch = useDispatch<AppDispatch>();
 
-  //   load();
-  // }, [user]);
+  useEffect(() => {
+    const calculate = async () => {
+      console.log("Calculating your total...");
+
+      try {
+        const productPromises = items.map(async (item) => {
+          const res = await axios({
+            method: "get",
+            withCredentials: true,
+            url: `http://localhost:8080/api/product/${item.productId}`,
+          });
+          const product: Product = res.data.product;
+          return product.price * item.quantity;
+        });
+
+        const productTotals = await Promise.all(productPromises);
+        const tempTotal = productTotals.reduce((acc, curr) => acc + curr, 0);
+        console.log("Total:", tempTotal);
+        setTotal(tempTotal);
+      } catch (error) {
+        toast.error("Error in calculating your bill, try again in some time");
+      }
+    };
+
+    calculate();
+  }, [items]);
 
   return (
-    <SheetContent>
+    <SheetContent className="font-sg">
       <SheetHeader>
-        <SheetTitle>Checkout Sidebar</SheetTitle>
+        <SheetTitle className="font-sgb">Checkout</SheetTitle>
+        <SheetDescription>Let's get your order placed!</SheetDescription>
       </SheetHeader>
 
-      <Button>checkout</Button>
+      <p className="pt-8 pb-2">Order summary:</p>
+      <div className="h-full flex flex-col overflow-scroll no-scrollbar py-5 gap-3">
+        {items.map((item) => (
+          <CartItem key={item.productId} cartItem={item} />
+        ))}
+
+        <div className="text-2xl py-5 flex gap-2">
+          Total:
+          {total === null ? (
+            <div className="flex items-center">
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+              <p className="text-sm">Calculating...</p>
+            </div>
+          ) : (
+            <p className="font-sgmb bg-slate-200 dark:bg-slate-600 px-2 rounded-md">
+              $ {total.toFixed(3)}
+            </p>
+          )}
+        </div>
+
+        <CardsPaymentMethod />
+
+        <Button
+          className="mb-32"
+          disabled={total === null}
+          onClick={async () => {
+            dispatch(toggle());
+            dispatch(togglePurchaseSuccess());
+            await dispatch(clearMyCartAsyc());
+            await dispatch(fetchCartItems());
+          }}
+        >
+          <div className="flex gap-2 justify-center items-center">
+            <p>Place Order</p>
+            <Truck className="h-5 w-5" />
+          </div>
+        </Button>
+      </div>
     </SheetContent>
   );
 };

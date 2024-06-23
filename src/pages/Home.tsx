@@ -1,6 +1,7 @@
 import AuthDialog from "@/components/AuthDialog";
 import Navbar from "@/components/Navbar";
 import ProductList from "@/components/ProductList";
+import PurchaseSuccessDialog from "@/components/PurchaseSuccessDialog";
 import Sidebar from "@/components/Sidebar";
 import { useEffect } from "react";
 
@@ -11,6 +12,7 @@ const Home = () => {
       <ProductList />
       <Sidebar />
       <AuthDialog />
+      <PurchaseSuccessDialog />
     </div>
   );
 };

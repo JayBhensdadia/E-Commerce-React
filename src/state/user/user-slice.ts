@@ -43,6 +43,9 @@ export const userSlice = createSlice({
         }).addCase(loginUser.rejected, (state) => {
             console.log('login failed...');
             toast('login failed');
+        }).addCase(clearMyCartAsyc.fulfilled, (state) => {
+            console.log('cart cleard');
+            toast('cart cleard!');
         });
     }
 });
@@ -91,6 +94,28 @@ export const fetchUserDetails = createAsyncThunk(
         }
     }
 );
+
+export const clearMyCartAsyc = createAsyncThunk(
+    'user/clearCartAsync',
+    async () => {
+        try {
+
+
+            const res = await axios({
+                method: 'get',
+                url: "http://localhost:8080/api/cart/clear",
+                withCredentials: true
+            });
+
+
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+);
+
 
 export default userSlice.reducer;
 

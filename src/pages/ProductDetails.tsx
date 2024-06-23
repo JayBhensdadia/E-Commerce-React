@@ -14,6 +14,7 @@ import {
 } from "@/state/cart/cart-slice";
 import Sidebar from "@/components/Sidebar";
 import AuthDialog from "@/components/AuthDialog";
+import PurchaseSuccessDialog from "@/components/PurchaseSuccessDialog";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -75,6 +76,7 @@ const ProductDetails = () => {
 
       <Sidebar />
       <AuthDialog />
+      <PurchaseSuccessDialog />
     </div>
   );
 };

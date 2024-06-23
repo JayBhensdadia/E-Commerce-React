@@ -1,4 +1,6 @@
 import {
+  addToCart,
+  addToCartAsync,
   deleteCartItemAsync,
   deleteProductFromCart,
   fetchCartItems,
@@ -11,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import CustomImage from "./CustomImage";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/state/store";
-import { LoaderCircle, Minus, Trash2 } from "lucide-react";
+import { LoaderCircle, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -62,23 +64,78 @@ const CartItem = ({ cartItem }: { cartItem: CartItem }) => {
   }
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row gap-2 relative border-2 rounded-md">
       {/* image */}
       <div className="w-24 h-24 rounded-md overflow-clip m-3">
         <CustomImage url={product.image} />
       </div>
 
       {/* details */}
-      <div className="flex flex-col text-sm">
+      <div className="flex flex-col py-2 gap-3 text-sm">
         <p>{product.name}</p>
         <p className="font-sgb">$ {product.price}</p>
-        <p className="w-7 border-2 aspect-square rounded-md flex justify-center items-center">
-          {cartItem.quantity}
-        </p>
+        <div className="flex gap-10">
+          <div className="flex gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={async () => {
+                if (user) {
+                  await dispatch(
+                    addToCartAsync({
+                      userId: user._id,
+                      productId: cartItem.productId,
+                      quantity: 1,
+                    })
+                  );
+                  await dispatch(fetchCartItems());
+                  return;
+                } else {
+                  dispatch(
+                    addToCart({
+                      userId: "",
+                      productId: cartItem.productId,
+                      quantity: 1,
+                    })
+                  );
+                  return;
+                }
+              }}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+            <p className="w-9 border-2 aspect-square rounded-md flex justify-center items-center">
+              {cartItem.quantity}
+            </p>
 
-        <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={async () => {
+                if (user) {
+                  await dispatch(
+                    reduceCartItemQuantityAsync({
+                      itemId: cartItem.productId,
+                      userId: user._id,
+                      quantity: cartItem.quantity,
+                    })
+                  );
+
+                  await dispatch(fetchCartItems());
+                  return;
+                } else {
+                  dispatch(reduceQuantity(cartItem.productId));
+                  return;
+                }
+              }}
+            >
+              <Minus className="w-4 h-4" />
+            </Button>
+          </div>
+
           <Button
             variant="destructive"
+            size="icon"
             onClick={async () => {
               if (user) {
                 await dispatch(
@@ -97,30 +154,31 @@ const CartItem = ({ cartItem }: { cartItem: CartItem }) => {
           >
             <Trash2 className="w-4 h-4" />
           </Button>
+        </div>
 
+        {/* <div className="absolute ml-[165px] mt-[-10px]">
           <Button
             variant="destructive"
+            size="icon"
             onClick={async () => {
               if (user) {
                 await dispatch(
-                  reduceCartItemQuantityAsync({
+                  deleteCartItemAsync({
                     itemId: cartItem.productId,
                     userId: user._id,
-                    quantity: cartItem.quantity,
                   })
                 );
-
                 await dispatch(fetchCartItems());
                 return;
               } else {
-                dispatch(reduceQuantity(cartItem.productId));
+                dispatch(deleteProductFromCart(cartItem.productId));
                 return;
               }
             }}
           >
-            <Minus className="w-4 h-4" />
+            <Trash2 className="w-4 h-4" />
           </Button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
