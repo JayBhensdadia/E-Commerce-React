@@ -4,12 +4,14 @@ import { ShoppingCartIcon, User } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/state/store";
+import { AppDispatch, RootState } from "@/state/store";
 import { changeContent, toggle } from "@/state/sidebar/sidebar-slice";
 import { Input } from "./ui/input";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const items = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const scrolled = useScrollTop();
   const { id } = useParams();
@@ -28,16 +30,24 @@ const Navbar = () => {
       <div className="flex gap-3">
         <ModeToggle />
 
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => {
-            dispatch(changeContent("cart"));
-            dispatch(toggle());
-          }}
-        >
-          <ShoppingCartIcon className="primary" />
-        </Button>
+        <div className="relative">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              dispatch(changeContent("cart"));
+              dispatch(toggle());
+            }}
+          >
+            <ShoppingCartIcon className="primary" />
+          </Button>
+
+          {items.length > 0 && (
+            <p className="w-5 h-5 bg-red-500 rounded-full text-white flex justify-center items-center absolute mt-[-45px] ml-6">
+              {items.length}
+            </p>
+          )}
+        </div>
 
         <Button
           variant="outline"

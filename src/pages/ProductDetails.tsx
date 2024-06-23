@@ -7,14 +7,21 @@ import { Product, fetchProductById } from "@/state/product/product-slice";
 import { AppDispatch, RootState } from "@/state/store";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { addToCart } from "@/state/cart/cart-slice";
+import {
+  addToCart,
+  addToCartAsync,
+  fetchCartItems,
+} from "@/state/cart/cart-slice";
 import Sidebar from "@/components/Sidebar";
+import AuthDialog from "@/components/AuthDialog";
 
 const ProductDetails = () => {
   const { id } = useParams();
+
   const product = useSelector(
     (state: RootState) => state.products.selectedProduct
   );
+  const user = useSelector((state: RootState) => state.user.data);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -30,8 +37,8 @@ const ProductDetails = () => {
       {!product ? (
         <div>Invalid product ID</div>
       ) : (
-        <div className="w-full px-20 flex gap-5 ">
-          <div className="w-[500px] aspect-square">
+        <div className="w-full px-20 flex flex-col md:flex-row gap-5 items-center">
+          <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] aspect-square">
             <CustomImage url={product.image} />
           </div>
           <div>
@@ -39,11 +46,26 @@ const ProductDetails = () => {
             <p>{product.description}</p>
             <p className="text-lg font-semibold">${product.price}</p>
             <Button
-              onClick={() =>
-                dispatch(
-                  addToCart({ userId: "", productId: product._id, quantity: 1 })
-                )
-              }
+              onClick={async () => {
+                if (user) {
+                  await dispatch(
+                    addToCartAsync({
+                      userId: user._id,
+                      productId: product._id,
+                      quantity: 1,
+                    })
+                  );
+                  await dispatch(fetchCartItems());
+                } else {
+                  dispatch(
+                    addToCart({
+                      userId: "",
+                      productId: product._id,
+                      quantity: 1,
+                    })
+                  );
+                }
+              }}
             >
               Add to cart
             </Button>
@@ -52,6 +74,7 @@ const ProductDetails = () => {
       )}
 
       <Sidebar />
+      <AuthDialog />
     </div>
   );
 };

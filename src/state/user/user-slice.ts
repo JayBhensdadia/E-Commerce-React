@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "sonner";
+
 
 interface User {
     _id: string;
@@ -32,11 +34,15 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
             state.data = action.payload;
-        });
 
-        builder.addCase(loginUser.fulfilled, (state) => {
+
+        }).addCase(loginUser.fulfilled, (state) => {
             console.log('loggin in....');
+            toast('login successfull');
 
+        }).addCase(loginUser.rejected, (state) => {
+            console.log('login failed...');
+            toast('login failed');
         });
     }
 });
@@ -45,17 +51,23 @@ export const userSlice = createSlice({
 export const loginUser = createAsyncThunk(
     'user/login',
     async ({ email, password }: { email: string, password: string; }, { dispatch }) => {
-        const response = await axios({
-            method: 'post',
-            url: "localhost:8080/api/signin",
-            data: {
-                email,
-                password
-            },
-            withCredentials: true
-        });
+        try {
 
-        dispatch(fetchUserDetails());
+            const response = await axios({
+                method: 'post',
+                url: "http://localhost:8080/api/signin",
+                data: {
+                    email,
+                    password
+                },
+                withCredentials: true
+            });
+            await dispatch(fetchUserDetails());
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+
 
     }
 );
@@ -63,13 +75,20 @@ export const loginUser = createAsyncThunk(
 export const fetchUserDetails = createAsyncThunk(
     'user/fetchUserDetails',
     async () => {
-        const response = await axios({
-            method: 'get',
-            url: 'http://localhost:8080/api/user/me',
-            withCredentials: true
-        });
+        try {
 
-        return response.data;
+            const response = await axios({
+                method: 'get',
+                url: 'http://localhost:8080/api/user/me',
+                withCredentials: true
+            });
+
+            return response.data;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 );
 

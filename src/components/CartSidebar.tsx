@@ -10,51 +10,118 @@ import { AppDispatch, RootState } from "@/state/store";
 import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import {
+  deleteCartItemAsync,
   deleteProductFromCart,
+  fetchCartItems,
   loadCart,
+  reduceCartItemQuantityAsync,
   reduceQuantity,
+  syncCart,
 } from "@/state/cart/cart-slice";
+import { changeContent } from "@/state/sidebar/sidebar-slice";
+import { fetchUserDetails } from "@/state/user/user-slice";
+import { toggleAuth } from "@/state/auth/auth-slice";
+import CartItem from "./CartItem";
 
 const CartSidebar = () => {
   const items = useSelector((state: RootState) => state.cart.items);
+  const user = useSelector((state: RootState) => state.user.data);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(loadCart());
-  }, []);
+    const load = async () => {
+      if (user) {
+        await dispatch(syncCart());
+        await dispatch(fetchCartItems());
+      } else {
+        await dispatch(fetchUserDetails());
+
+        if (!user) {
+          await dispatch(loadCart());
+        }
+      }
+    };
+
+    load();
+  }, [user]);
   return (
-    <SheetContent>
+    <SheetContent className="font-sg">
       <SheetHeader>
-        <SheetTitle>Cart Sidebar</SheetTitle>
+        <SheetTitle className="font-sgb">Cart</SheetTitle>
         <SheetDescription>
-          This action cannot be undone. This will permanently delete your
-          account and remove your data from our servers.
+          {items.length != 0 ? "Great choices!" : "Keep shoping!"}
         </SheetDescription>
       </SheetHeader>
 
-      <div className="flex flex-col">
+      <div className="h-full flex flex-col overflow-scroll no-scrollbar py-5 gap-3">
         {items.map((item) => {
           return (
-            <div key={item.productId} className="flex flex-col border-2">
-              <p>{item.productId}</p>
-              <p>{item.userId}</p>
-              <p>{item.quantity}</p>
-              <Button
-                variant="destructive"
-                onClick={() => dispatch(deleteProductFromCart(item.productId))}
-              >
-                delete item
-              </Button>
+            <CartItem cartItem={item} />
+            // <div key={item.productId} className="flex flex-col border-2">
+            //   <p>{item.productId}</p>
+            //   <p>{item.userId}</p>
+            //   <p>{item.quantity}</p>
+            //   <Button
+            //     variant="destructive"
+            //     onClick={async () => {
+            //       if (user) {
+            //         await dispatch(
+            //           deleteCartItemAsync({
+            //             itemId: item.productId,
+            //             userId: user._id,
+            //           })
+            //         );
+            //         await dispatch(fetchCartItems());
+            //         return;
+            //       } else {
+            //         dispatch(deleteProductFromCart(item.productId));
+            //         return;
+            //       }
+            //     }}
+            //   >
+            //     delete item
+            //   </Button>
 
-              <Button
-                variant="destructive"
-                onClick={() => dispatch(reduceQuantity(item.productId))}
-              >
-                -
-              </Button>
-            </div>
+            //   <Button
+            //     variant="destructive"
+            //     onClick={async () => {
+            //       if (user) {
+            //         await dispatch(
+            //           reduceCartItemQuantityAsync({
+            //             itemId: item.productId,
+            //             userId: user._id,
+            //             quantity: item.quantity,
+            //           })
+            //         );
+
+            //         await dispatch(fetchCartItems());
+            //         return;
+            //       } else {
+            //         dispatch(reduceQuantity(item.productId));
+            //         return;
+            //       }
+            //     }}
+            //   >
+            //     -
+            //   </Button>
+            // </div>
           );
         })}
+
+        {items.length !== 0 && (
+          <Button
+            className="mb-32"
+            onClick={async () => {
+              if (user) {
+                await dispatch(changeContent("checkout"));
+              } else {
+                await dispatch(toggleAuth());
+              }
+            }}
+          >
+            Checkout
+          </Button>
+        )}
       </div>
     </SheetContent>
   );

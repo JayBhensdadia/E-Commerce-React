@@ -1,21 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetDescription,
 } from "./ui/sheet";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/state/store";
+import { useDispatch } from "react-redux";
+import { changeContent, toggle } from "@/state/sidebar/sidebar-slice";
+import { toggleAuth } from "@/state/auth/auth-slice";
+import { Button } from "./ui/button";
+import { fetchUserDetails } from "@/state/user/user-slice";
 
 const CheckoutSidebar = () => {
+  // const user = useSelector((state: RootState) => state.user.data);
+  // const dispatch = useDispatch<AppDispatch>();
+
+  // useEffect(() => {
+  //   const load = async () => {
+  //     await dispatch(fetchUserDetails());
+  //     if (!user) {
+  //       await dispatch(toggle());
+  //       await dispatch(toggleAuth());
+  //     } else {
+  //       await dispatch(changeContent("checkout"));
+  //     }
+  //   };
+
+  //   load();
+  // }, [user]);
+
   return (
     <SheetContent>
       <SheetHeader>
         <SheetTitle>Checkout Sidebar</SheetTitle>
-        <SheetDescription>
-          This action cannot be undone. This will permanently delete your
-          account and remove your data from our servers.
-        </SheetDescription>
       </SheetHeader>
+
+      <Button>checkout</Button>
     </SheetContent>
   );
 };
