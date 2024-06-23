@@ -16,41 +16,25 @@ const initialState: CartState = {
     items: []
 };
 
-
-
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
         addToCart: (state, action: PayloadAction<CartItem>) => {
-
-
-            // loadCart();
-
             const cart = localStorage.getItem('jb-cart');
             if (!cart) {
                 state.items.push(action.payload);
                 localStorage.setItem('jb-cart', JSON.stringify(state.items));
-
             } else {
-
-                // const oldItems: CartItem[] = JSON.parse(cart);
                 const prevItem = state.items.find((item) => item.productId === action.payload.productId);
-
                 if (prevItem) {
                     prevItem.quantity += action.payload.quantity;
                 } else {
                     state.items.push(action.payload);
                 }
-
-
                 localStorage.setItem('jb-cart', JSON.stringify(state.items));
-
                 toast('item added to cart!');
-
             }
-
-
         },
         loadCart: (state) => {
             const cart = localStorage.getItem('jb-cart');
@@ -63,7 +47,6 @@ export const cartSlice = createSlice({
             localStorage.setItem("jb-cart", JSON.stringify(state.items));
             toast('item deleted from cart');
         },
-
         reduceQuantity: (state, action: PayloadAction<string>) => {
             const reducingItem = state.items.find((item) => item.productId === action.payload);
             if (reducingItem) {
@@ -73,168 +56,108 @@ export const cartSlice = createSlice({
                 }
                 reducingItem.quantity -= 1;
             }
+            localStorage.setItem('jb-cart', JSON.stringify(state.items));
             toast('item quantity reduced from cart');
         }
     },
     extraReducers: (builder) => {
         builder.addCase(syncCart.fulfilled, (state, action) => {
-            // state.items = action.payload;
-            console.log('car synced!!');
+            // Clear local storage after syncing with database
+            localStorage.removeItem('jb-cart');
             toast.success('cart synced with database');
-
-
         }).addCase(fetchCartItems.fulfilled, (state, action) => {
-            console.log('database cart data loaded!');
-
+            // Ensure to replace local items with the ones fetched from the server
             state.items = action.payload;
+            toast.success('database cart data loaded!');
         }).addCase(addToCartAsync.fulfilled, (state, action) => {
-            console.log('success : asyc add to cart');
             toast.success('item added to cart');
-
         }).addCase(deleteCartItemAsync.fulfilled, (state, action) => {
-            console.log('success: async delete to cart');
             toast.success('item deleted from cart');
-
         }).addCase(reduceCartItemQuantityAsync.fulfilled, (state, action) => {
-            console.log('success: asycn reduce quantity');
             toast.success('item quantity reduced from cart');
-
         });
     }
 });
-
 
 export const syncCart = createAsyncThunk(
     'cart/syncCart',
     async () => {
         try {
-
-
             const cart = localStorage.getItem('jb-cart');
             if (cart) {
-                const response = await axios({
-                    method: 'post',
-                    withCredentials: true,
-                    url: "http://localhost:8080/api/cart/sync",
-                    data: {
-                        localItems: JSON.parse(cart)
-                    }
-                });
-
-
-                localStorage.removeItem('jb-cart');
+                await axios.post(
+                    "http://localhost:8080/api/cart/sync",
+                    { localItems: JSON.parse(cart) },
+                    { withCredentials: true }
+                );
             }
-
-
-
-
-
-
-
         } catch (error) {
             console.log(error);
             throw error;
         }
     }
 );
-
 
 export const fetchCartItems = createAsyncThunk(
     'cart/fetchCartItems',
     async () => {
         try {
-
-            const response = await axios({
-                method: 'get',
-                url: "http://localhost:8080/api/cart",
-                withCredentials: true
-            });
-
+            const response = await axios.get("http://localhost:8080/api/cart", { withCredentials: true });
             return response.data['cartItems'];
-
         } catch (error) {
             console.log(error);
             throw error;
         }
     }
 );
-
 
 export const addToCartAsync = createAsyncThunk(
     'cart/addToCartAsync',
     async ({ userId, productId, quantity }: CartItem) => {
         try {
-
-            const res = await axios({
-                method: 'post',
-                withCredentials: true,
-                url: 'http://localhost:8080/api/cart',
-                data: {
-                    userId,
-                    productId,
-                    quantity
-                }
-            });
-
+            await axios.post(
+                'http://localhost:8080/api/cart',
+                { userId, productId, quantity },
+                { withCredentials: true }
+            );
         } catch (error) {
             console.log(error);
             throw error;
-
         }
     }
 );
 
-//delete async
 export const deleteCartItemAsync = createAsyncThunk(
     'cart/deleteAsync',
     async ({ itemId, userId }: { itemId: string, userId: string; }) => {
-
         try {
-
-            const res = await axios({
-                method: 'delete',
-                url: `http://localhost:8080/api/cart`,
-                withCredentials: true,
-                data: {
-                    productId: itemId,
-                    userId
+            await axios.delete(
+                `http://localhost:8080/api/cart`,
+                {
+                    withCredentials: true,
+                    data: { productId: itemId, userId }
                 }
-            });
-
+            );
         } catch (error) {
             console.log(error);
             throw error;
-
         }
     }
 );
 
-
-
-//reduce async
 export const reduceCartItemQuantityAsync = createAsyncThunk(
     'cart/reduceAsync',
     async ({ itemId, userId, quantity }: { itemId: string, userId: string, quantity: number; }) => {
-
         try {
-
-            const res = await axios({
-                method: 'put',
-                url: `http://localhost:8080/api/cart`,
-                withCredentials: true,
-                data: {
-                    userId,
-                    productId: itemId,
-                    quantity: quantity - 1
-                }
-            });
-
+            await axios.put(
+                `http://localhost:8080/api/cart`,
+                { userId, productId: itemId, quantity: quantity - 1 },
+                { withCredentials: true }
+            );
         } catch (error) {
             console.log(error);
             throw error;
-
         }
-
     }
 );
 

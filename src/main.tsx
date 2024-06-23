@@ -9,14 +9,12 @@ import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <ThemeProvider defaultTheme="light" storageKey="jb-ui-theme">
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-          <Toaster position="bottom-left" closeButton={true} />
-        </BrowserRouter>
-      </Provider>
-    </ThemeProvider>
-  </React.StrictMode>
+  <ThemeProvider defaultTheme="light" storageKey="jb-ui-theme">
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+        <Toaster position="bottom-left" closeButton={true} />
+      </BrowserRouter>
+    </Provider>
+  </ThemeProvider>
 );

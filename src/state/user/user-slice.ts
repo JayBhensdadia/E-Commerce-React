@@ -34,8 +34,6 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
             state.data = action.payload;
-
-
         }).addCase(loginUser.fulfilled, (state) => {
             console.log('loggin in....');
             toast.success('login successfull');
@@ -46,9 +44,62 @@ export const userSlice = createSlice({
         }).addCase(clearMyCartAsyc.fulfilled, (state) => {
             console.log('cart cleard');
             toast('cart cleard!');
+        }).addCase(signupUser.fulfilled, (state, action) => {
+            toast.success('account created! now you can login!');
+        }).addCase(signupUser.rejected, (state, action) => {
+            toast.error('failed to create account! try again!');
+        }).addCase(logoutUser.fulfilled, (state, action) => {
+            state.data = null;
+            toast.success('logged out!');
+        }).addCase(logoutUser.rejected, (state, action) => {
+
+            toast.error('failed to logout');
         });
     }
 });
+
+
+export const logoutUser = createAsyncThunk(
+    'user/logout',
+    async () => {
+        try {
+            const response = await axios({
+                method: 'get',
+                url: "http://localhost:8080/api/logout",
+                withCredentials: true
+            });
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+);
+
+export const signupUser = createAsyncThunk(
+    'user/signup',
+    async ({ email, password }: { email: string, password: string; }, { dispatch }) => {
+        try {
+
+            const response = await axios({
+                method: 'post',
+                url: "http://localhost:8080/api/signup",
+                data: {
+                    email,
+                    password
+                },
+                withCredentials: true
+            });
+            // await dispatch(fetchUserDetails());
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+
+
+    }
+
+);
 
 
 export const loginUser = createAsyncThunk(

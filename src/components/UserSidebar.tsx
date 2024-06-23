@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 import { useDispatch } from "react-redux";
 import { changeAuthContent, toggleAuth } from "@/state/auth/auth-slice";
 import { toggle } from "@/state/sidebar/sidebar-slice";
-import { fetchUserDetails } from "@/state/user/user-slice";
+import { fetchUserDetails, logoutUser } from "@/state/user/user-slice";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const UserSidebar = () => {
@@ -66,14 +66,23 @@ const UserSidebar = () => {
               Signin
             </Button>
 
-            <Button variant="secondary" onClick={() => {}}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                dispatch(changeAuthContent("signup"));
+                dispatch(toggle());
+                dispatch(toggleAuth());
+              }}
+            >
               Signup
             </Button>
           </div>
         ) : (
           <Button
-            onClick={() => {
+            onClick={async () => {
               dispatch(toggle());
+              await dispatch(logoutUser());
+              await dispatch(fetchUserDetails());
             }}
           >
             Logout
