@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Provider store={store}>
         <BrowserRouter>
           <App />
-          <Toaster position="bottom-left" />
+          <Toaster position="bottom-left" closeButton={true} />
         </BrowserRouter>
       </Provider>
     </ThemeProvider>

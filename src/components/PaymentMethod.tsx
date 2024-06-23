@@ -1,4 +1,10 @@
-import { Banknote, ScrollText } from "lucide-react";
+import { AppDispatch } from "@/state/store";
+import { Banknote, ScrollText, Truck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
@@ -9,8 +15,54 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { toggle } from "@/state/sidebar/sidebar-slice";
+import { clearMyCartAsyc } from "@/state/user/user-slice";
+import { fetchCartItems } from "@/state/cart/cart-slice";
+import { togglePurchaseSuccess } from "@/state/purchase-success/purchase-success-slice";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export function CardsPaymentMethod() {
+const formSchema = z.object({
+  name: z.string().nonempty("Name cannot be empty"),
+  city: z.string().nonempty("City cannot be empty"),
+  pincode: z
+    .string()
+    .nonempty("Pincode cannot be empty")
+    .regex(/^\d{6}$/, "Pincode must be a 6-digit number"),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+export function CardsPaymentMethod({ isSidebar }: { isSidebar: boolean }) {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    watch,
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+  });
+
+  useEffect(() => {
+    // Watch form fields to trigger validation
+    watch();
+  }, [watch]);
+
+  const onSubmit = async (data: FormData) => {
+    navigate("/home");
+    if (isSidebar) {
+      dispatch(toggle());
+    }
+    await dispatch(clearMyCartAsyc());
+    await dispatch(fetchCartItems());
+    dispatch(togglePurchaseSuccess());
+  };
+
   return (
     <Card className="dark:bg-[#1F1F1F]">
       <CardHeader>
@@ -37,80 +89,51 @@ export function CardsPaymentMethod() {
 
           <div>
             <RadioGroupItem
-              value="apple"
-              id="apple"
+              value="cheque"
+              id="cheque"
               className="peer sr-only"
-              aria-label="Apple"
+              aria-label="Cheque"
             />
             <Label
-              htmlFor="apple"
+              htmlFor="cheque"
               className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary text-center"
             >
-              {/* <Icons.apple className="mb-3 h-6 w-6" /> */}
               <ScrollText className="mb-3 h-6 w-6" />
               Cheque on Delivery
             </Label>
           </div>
         </RadioGroup>
-        <div className="grid gap-2">
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" placeholder="First Last" />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="city">City</Label>
-          <Input id="city" placeholder="" />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="number">Pincode</Label>
-          <Input id="number" placeholder="" />
-        </div>
-        {/* <div className="grid grid-cols-3 gap-4">
+
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
           <div className="grid gap-2">
-            <Label htmlFor="month">Expires</Label>
-            <Select>
-              <SelectTrigger id="month" aria-label="Month">
-                <SelectValue placeholder="Month" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">January</SelectItem>
-                <SelectItem value="2">February</SelectItem>
-                <SelectItem value="3">March</SelectItem>
-                <SelectItem value="4">April</SelectItem>
-                <SelectItem value="5">May</SelectItem>
-                <SelectItem value="6">June</SelectItem>
-                <SelectItem value="7">July</SelectItem>
-                <SelectItem value="8">August</SelectItem>
-                <SelectItem value="9">September</SelectItem>
-                <SelectItem value="10">October</SelectItem>
-                <SelectItem value="11">November</SelectItem>
-                <SelectItem value="12">December</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" placeholder="First Last" {...register("name")} />
+            {errors.name && (
+              <p className="text-red-600 text-sm">{errors.name.message}</p>
+            )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="year">Year</Label>
-            <Select>
-              <SelectTrigger id="year" aria-label="Year">
-                <SelectValue placeholder="Year" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <SelectItem key={i} value={`${new Date().getFullYear() + i}`}>
-                    {new Date().getFullYear() + i}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label htmlFor="city">City</Label>
+            <Input id="city" placeholder="" {...register("city")} />
+            {errors.city && (
+              <p className="text-red-600 text-sm">{errors.city.message}</p>
+            )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="cvc">CVC</Label>
-            <Input id="cvc" placeholder="CVC" />
+            <Label htmlFor="pincode">Pincode</Label>
+            <Input id="pincode" placeholder="" {...register("pincode")} />
+            {errors.pincode && (
+              <p className="text-red-600 text-sm">{errors.pincode.message}</p>
+            )}
           </div>
-        </div> */}
+          <Button type="submit">
+            <div className="flex gap-2 justify-center items-center">
+              <p>Place Order</p>
+              <Truck className="h-5 w-5" />
+            </div>
+          </Button>
+        </form>
       </CardContent>
-      {/* <CardFooter>
-        <Button className="w-full">Continue</Button>
-      </CardFooter> */}
     </Card>
   );
 }

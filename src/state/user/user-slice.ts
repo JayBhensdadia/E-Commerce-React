@@ -38,11 +38,11 @@ export const userSlice = createSlice({
 
         }).addCase(loginUser.fulfilled, (state) => {
             console.log('loggin in....');
-            toast('login successfull');
+            toast.success('login successfull');
 
         }).addCase(loginUser.rejected, (state) => {
             console.log('login failed...');
-            toast('login failed');
+            toast.error('login failed!');
         }).addCase(clearMyCartAsyc.fulfilled, (state) => {
             console.log('cart cleard');
             toast('cart cleard!');

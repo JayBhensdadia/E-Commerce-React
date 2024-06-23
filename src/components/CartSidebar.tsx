@@ -22,6 +22,7 @@ import { changeContent } from "@/state/sidebar/sidebar-slice";
 import { fetchUserDetails } from "@/state/user/user-slice";
 import { toggleAuth } from "@/state/auth/auth-slice";
 import CartItem from "./CartItem";
+import EmptyCartImage from "../assets/images/empty-cart.svg";
 
 const CartSidebar = () => {
   const items = useSelector((state: RootState) => state.cart.items);
@@ -54,6 +55,12 @@ const CartSidebar = () => {
       </SheetHeader>
 
       <div className="h-full flex flex-col overflow-scroll no-scrollbar py-5 gap-3">
+        {items.length === 0 && (
+          <div className="flex-1 flex justify-center items-center">
+            <img src={EmptyCartImage} alt="" className="w-[250px]" />
+          </div>
+        )}
+
         {items.map((item) => {
           return <CartItem cartItem={item} />;
         })}

@@ -4,6 +4,7 @@ import ProductList from "@/components/ProductList";
 import PurchaseSuccessDialog from "@/components/PurchaseSuccessDialog";
 import Sidebar from "@/components/Sidebar";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   return (

@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/state/store";
 import { Button } from "./ui/button";
 import CartItem from "./CartItem";
-import { LoaderCircle, Truck } from "lucide-react";
+import { LoaderCircle, Maximize2, Truck } from "lucide-react";
 import axios from "axios";
 import { type Product } from "@/state/product/product-slice";
 import { toast } from "sonner";
@@ -19,13 +19,14 @@ import { togglePurchaseSuccess } from "@/state/purchase-success/purchase-success
 import { toggle } from "@/state/sidebar/sidebar-slice";
 import { clearMyCartAsyc } from "@/state/user/user-slice";
 import { fetchCartItems } from "@/state/cart/cart-slice";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutSidebar = () => {
   const items = useSelector((state: RootState) => state.cart.items);
   const [total, setTotal] = useState<number | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const calculate = async () => {
       console.log("Calculating your total...");
@@ -56,7 +57,21 @@ const CheckoutSidebar = () => {
   return (
     <SheetContent className="font-sg">
       <SheetHeader>
-        <SheetTitle className="font-sgb">Checkout</SheetTitle>
+        <div className="flex gap-1 items-center">
+          <Button
+            className="hover:scale-105"
+            size="icon"
+            variant="outline"
+            onClick={async () => {
+              dispatch(toggle());
+              navigate("/checkout");
+            }}
+          >
+            <Maximize2 className="h-5 w-5" />
+          </Button>
+
+          <SheetTitle className="font-sgb">Checkout</SheetTitle>
+        </div>
         <SheetDescription>Let's get your order placed!</SheetDescription>
       </SheetHeader>
 
@@ -80,13 +95,16 @@ const CheckoutSidebar = () => {
           )}
         </div>
 
-        <CardsPaymentMethod />
+        <div className="mb-32">
+          <CardsPaymentMethod isSidebar={true} />
+        </div>
 
-        <Button
+        {/* <Button
           className="mb-32"
-          disabled={total === null}
+          disabled={total === null || total === 0}
           onClick={async () => {
             dispatch(toggle());
+
             dispatch(togglePurchaseSuccess());
             await dispatch(clearMyCartAsyc());
             await dispatch(fetchCartItems());
@@ -96,7 +114,7 @@ const CheckoutSidebar = () => {
             <p>Place Order</p>
             <Truck className="h-5 w-5" />
           </div>
-        </Button>
+        </Button> */}
       </div>
     </SheetContent>
   );

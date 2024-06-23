@@ -36,11 +36,9 @@ const ProductList = () => {
 
   const navigate = useNavigate();
 
-  //   const pageRange = Lodash.range(1, totalPages as number);
-
   return (
-    <div className="mt-60 w-full px-10 flex-1 flex flex-col dark:bg-[#1F1F1F] no-scrollbar">
-      <div className="grid grid-cols-1 self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
+    <div className="mt-[350px] w-full px-10 flex-1 flex flex-col dark:bg-[#1F1F1F] no-scrollbar">
+      <div className="w-full flex-1 grid grid-cols-1 self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 ">
         {products.map((product) => {
           return (
             <div key={product._id} onClick={() => navigate(`/${product._id}`)}>

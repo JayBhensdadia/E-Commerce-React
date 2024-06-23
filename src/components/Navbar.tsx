@@ -25,7 +25,12 @@ const Navbar = () => {
     >
       <div className="text-2xl capitalize font-sgb flex gap-10">
         <p>Haatdi</p>
-        {id ? null : <Input placeholder="What are you looking for?" />}
+        {id ? null : (
+          <Input
+            placeholder="What are you looking for?"
+            className="hidden sm:block"
+          />
+        )}
       </div>
       <div className="flex gap-3">
         <ModeToggle />

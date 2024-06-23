@@ -74,8 +74,8 @@ const CartItem = ({ cartItem }: { cartItem: CartItem }) => {
       <div className="flex flex-col py-2 gap-3 text-sm">
         <p>{product.name}</p>
         <p className="font-sgb">$ {product.price}</p>
-        <div className="flex gap-10">
-          <div className="flex gap-1">
+        <div className="flex justify-between gap-5 pr-2">
+          <div className="flex gap-1 self-start">
             <Button
               variant="outline"
               size="icon"

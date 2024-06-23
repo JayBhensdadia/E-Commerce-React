@@ -80,7 +80,7 @@ export const cartSlice = createSlice({
         builder.addCase(syncCart.fulfilled, (state, action) => {
             // state.items = action.payload;
             console.log('car synced!!');
-            toast('cart synced with database');
+            toast.success('cart synced with database');
 
 
         }).addCase(fetchCartItems.fulfilled, (state, action) => {
@@ -89,15 +89,15 @@ export const cartSlice = createSlice({
             state.items = action.payload;
         }).addCase(addToCartAsync.fulfilled, (state, action) => {
             console.log('success : asyc add to cart');
-            toast('item added to cart');
+            toast.success('item added to cart');
 
         }).addCase(deleteCartItemAsync.fulfilled, (state, action) => {
             console.log('success: async delete to cart');
-            toast('item deleted from cart');
+            toast.success('item deleted from cart');
 
         }).addCase(reduceCartItemQuantityAsync.fulfilled, (state, action) => {
             console.log('success: asycn reduce quantity');
-            toast('item quantity reduced from cart');
+            toast.success('item quantity reduced from cart');
 
         });
     }

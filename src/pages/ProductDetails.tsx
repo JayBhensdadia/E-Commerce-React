@@ -15,6 +15,7 @@ import {
 import Sidebar from "@/components/Sidebar";
 import AuthDialog from "@/components/AuthDialog";
 import PurchaseSuccessDialog from "@/components/PurchaseSuccessDialog";
+import { ShoppingCart } from "lucide-react";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -38,15 +39,17 @@ const ProductDetails = () => {
       {!product ? (
         <div>Invalid product ID</div>
       ) : (
-        <div className="w-full px-20 flex flex-col md:flex-row gap-5 items-center">
-          <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] aspect-square">
+        <div className="w-full px-10 sm:px-20 flex flex-col md:flex-row gap-16 items-center font-sg ">
+          <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] aspect-square rounded-lg overflow-clip shadow-2xl">
             <CustomImage url={product.image} />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold">{product.name}</h1>
-            <p>{product.description}</p>
-            <p className="text-lg font-semibold">${product.price}</p>
+          <div className=" w-full flex flex-col gap-5 self-start">
+            <h1 className="text-4xl font-sgb">{product.name}</h1>
+            <hr />
+            <p className="text-lg">{product.description}</p>
+            <p className="text-3xl font-sgb">${product.price}</p>
             <Button
+              className="max-w-[300px]"
               onClick={async () => {
                 if (user) {
                   await dispatch(
@@ -68,7 +71,10 @@ const ProductDetails = () => {
                 }
               }}
             >
-              Add to cart
+              <div className="flex gap-2 items-center justify-center">
+                <p>Add to cart</p>
+                <ShoppingCart className="h-5 w-5" />
+              </div>
             </Button>
           </div>
         </div>
