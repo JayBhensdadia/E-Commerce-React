@@ -18,6 +18,7 @@ import Navbar from "@/components/Navbar";
 import Payment from "../assets/images/payment.svg";
 import { useNavigate } from "react-router-dom";
 import LoginImage from "../assets/images/login.svg";
+import Footer from "@/components/Footer";
 
 const CheckoutPage = () => {
   const user = useSelector((state: RootState) => state.user.data);
@@ -132,6 +133,8 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

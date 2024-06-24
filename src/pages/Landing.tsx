@@ -10,7 +10,7 @@ const Landing = () => {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center dark:bg-[#1F1F1F] no-scrollbar font-sg">
       <Navbar />
-      <div className="mt-[50px] mx-20">
+      <div className="flex-1 mx-20 flex justify-center items-center">
         <div className="flex-1 flex flex-col sm:flex-row gap-20 justify-center items-center">
           <img
             src={HeroImage}

@@ -1,4 +1,5 @@
 import AuthDialog from "@/components/AuthDialog";
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductList from "@/components/ProductList";
 import PurchaseSuccessDialog from "@/components/PurchaseSuccessDialog";
@@ -8,9 +9,10 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center dark:bg-[#1F1F1F] no-scrollbar">
+    <div className="w-full h-screen flex flex-col gap-5 items-center dark:bg-[#1F1F1F] no-scrollbar relative">
       <Navbar />
       <ProductList />
+      <Footer />
       <Sidebar />
       <AuthDialog />
       <PurchaseSuccessDialog />

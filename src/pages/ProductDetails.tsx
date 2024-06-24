@@ -16,6 +16,7 @@ import Sidebar from "@/components/Sidebar";
 import AuthDialog from "@/components/AuthDialog";
 import PurchaseSuccessDialog from "@/components/PurchaseSuccessDialog";
 import { ShoppingCart } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -33,17 +34,17 @@ const ProductDetails = () => {
   }, [id]);
 
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center dark:bg-[#1F1F1F] no-scrollbar">
+    <div className="w-full h-screen flex flex-col items-center dark:bg-[#1F1F1F] no-scrollbar relative">
       <Navbar />
 
       {!product ? (
-        <div>Invalid product ID</div>
+        <div className="flex-1">Invalid product ID</div>
       ) : (
-        <div className="w-full px-10 sm:px-20 flex flex-col md:flex-row gap-16 items-center font-sg ">
+        <div className="flex-1 w-full px-10 py-20 sm:px-20 flex flex-col md:flex-row gap-16 items-center font-sg ">
           <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] aspect-square rounded-lg overflow-clip shadow-2xl">
             <CustomImage url={product.image} />
           </div>
-          <div className=" w-full flex flex-col gap-5 self-start">
+          <div className="w-full flex flex-col gap-5 self-start">
             <h1 className="text-4xl font-sgb">{product.name}</h1>
             <hr />
             <p className="text-lg">{product.description}</p>
@@ -83,6 +84,7 @@ const ProductDetails = () => {
       <Sidebar />
       <AuthDialog />
       <PurchaseSuccessDialog />
+      <Footer />
     </div>
   );
 };
