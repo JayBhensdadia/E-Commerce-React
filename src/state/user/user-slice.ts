@@ -16,7 +16,7 @@ interface User {
     updatedAt?: Date;
 }
 
-
+//user state definition
 interface UserState {
     data: User | null | undefined,
 }
@@ -26,39 +26,70 @@ const initialState: UserState = {
 };
 
 
-
+//user slice configurations
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+
+            //if successfully fetched user details => update the user state
+            //with new fetched value 
             state.data = action.payload;
+
+
         }).addCase(loginUser.fulfilled, (state) => {
-            console.log('loggin in....');
+
+
+            //on successfull login show toast
             toast.success('login successfull');
 
         }).addCase(loginUser.rejected, (state) => {
-            console.log('login failed...');
+
+
+            //on failed login show toast
             toast.error('login failed!');
+
         }).addCase(clearMyCartAsyc.fulfilled, (state) => {
-            console.log('cart cleard');
+
+
+            // on successfull clearing of cart show toast
             toast('cart cleard!');
+
+
         }).addCase(signupUser.fulfilled, (state, action) => {
+
+            //on successfull signup
             toast.success('account created! now you can login!');
+
+
+
         }).addCase(signupUser.rejected, (state, action) => {
+
+            // on fialed signup
             toast.error('failed to create account! try again!');
+
+
         }).addCase(logoutUser.fulfilled, (state, action) => {
+
+            //on successfull logout
             state.data = null;
             toast.success('logged out!');
+
+
         }).addCase(logoutUser.rejected, (state, action) => {
 
+            //on failed logout attempt
             toast.error('failed to logout');
+
+
         });
     }
 });
 
 
+//how to handle user logout
 export const logoutUser = createAsyncThunk(
     'user/logout',
     async () => {
@@ -76,6 +107,8 @@ export const logoutUser = createAsyncThunk(
     }
 );
 
+
+//how to handle user signup
 export const signupUser = createAsyncThunk(
     'user/signup',
     async ({ email, password }: { email: string, password: string; }, { dispatch }) => {
@@ -101,7 +134,7 @@ export const signupUser = createAsyncThunk(
 
 );
 
-
+//how to handle user login
 export const loginUser = createAsyncThunk(
     'user/login',
     async ({ email, password }: { email: string, password: string; }, { dispatch }) => {
@@ -126,6 +159,8 @@ export const loginUser = createAsyncThunk(
     }
 );
 
+
+//how to fetch user details
 export const fetchUserDetails = createAsyncThunk(
     'user/fetchUserDetails',
     async () => {
@@ -146,6 +181,8 @@ export const fetchUserDetails = createAsyncThunk(
     }
 );
 
+
+//how to handle clear cart from database
 export const clearMyCartAsyc = createAsyncThunk(
     'user/clearCartAsync',
     async () => {

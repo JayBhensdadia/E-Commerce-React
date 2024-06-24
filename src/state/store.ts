@@ -6,7 +6,7 @@ import userReducer from './user/user-slice';
 import authReducer from './auth/auth-slice';
 import purchaseSuccessReducer from './purchase-success/purchase-success-slice';
 
-
+//redux store configurations
 export const store = configureStore({
     reducer: {
         products: productsReducer,
@@ -19,6 +19,6 @@ export const store = configureStore({
 });
 
 
-
+//export necessary types from redux store
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

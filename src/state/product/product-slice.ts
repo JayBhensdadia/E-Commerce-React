@@ -10,6 +10,8 @@ export interface Product {
     image: string;
 }
 
+
+//product state
 interface ProductsState {
     value: Product[];
     totalPages: Number;
@@ -23,25 +25,32 @@ const initialState: ProductsState = {
     selectedProduct: null
 };
 
-
+//product slice configuration
 export const productSlice = createSlice({
     name: "products",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchProducts.fulfilled, (state, action) => {
+
+            //on successfull fetching of product
+
+            //update the state
             state.value = action.payload.list;
             state.totalPages = action.payload.totalPages;
 
         });
 
         builder.addCase(fetchProductById.fulfilled, (state, action) => {
+
+            //on successfull fetching of particular product
+            //update the state 
             state.selectedProduct = action.payload;
         });
     }
 });
 
-
+//how to fetch products
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
     async ({ page, pageSize }: { page: number, pageSize: number; }) => {
@@ -56,7 +65,7 @@ export const fetchProducts = createAsyncThunk(
     }
 );
 
-
+//how to fecth particular product 
 export const fetchProductById = createAsyncThunk(
     'products/fetchProductById',
     async (id: string) => {

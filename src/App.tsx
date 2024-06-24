@@ -5,6 +5,8 @@ import Landing from "./pages/Landing";
 import CheckoutPage from "./pages/Checkout";
 import Contact from "./pages/Contact";
 
+
+//root component of react application
 const App = () => {
   return (
     <Routes>

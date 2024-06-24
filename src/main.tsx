@@ -8,6 +8,9 @@ import { store } from "./state/store.ts";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner.tsx";
 
+
+
+//entry point of react application
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <ThemeProvider defaultTheme="light" storageKey="jb-ui-theme">
     <Provider store={store}>
