@@ -76,6 +76,7 @@ export const userSlice = createSlice({
             //on successfull logout
             state.data = null;
             toast.success('logged out!');
+            // localStorage.removeItem("jb-cart");
 
 
         }).addCase(logoutUser.rejected, (state, action) => {

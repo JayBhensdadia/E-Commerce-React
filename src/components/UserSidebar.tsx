@@ -13,6 +13,7 @@ import { changeAuthContent, toggleAuth } from "@/state/auth/auth-slice";
 import { toggle } from "@/state/sidebar/sidebar-slice";
 import { fetchUserDetails, logoutUser } from "@/state/user/user-slice";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { fetchCartItems, loadCart } from "@/state/cart/cart-slice";
 
 const UserSidebar = () => {
   const user = useSelector((state: RootState) => state.user.data);
@@ -83,6 +84,7 @@ const UserSidebar = () => {
               dispatch(toggle());
               await dispatch(logoutUser());
               await dispatch(fetchUserDetails());
+              await dispatch(loadCart());
             }}
           >
             Logout

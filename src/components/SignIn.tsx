@@ -68,7 +68,7 @@ const SignIn = () => {
   };
 
   return (
-    <DialogContent className="max-w-[300px] rounded-md sm:max-w-[425px] dark:bg-[#1F1F1F] font-sg">
+    <DialogContent className="max-w-[300px] rounded-md sm:max-w-[425px] font-sg">
       <DialogHeader>
         <DialogTitle className="font-sgb">Singin</DialogTitle>
         <DialogDescription>Good to see you again!</DialogDescription>

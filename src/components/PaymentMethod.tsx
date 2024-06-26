@@ -36,7 +36,13 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function CardsPaymentMethod({ isSidebar, total }: { isSidebar: boolean, total: number; }) {
+export function CardsPaymentMethod({
+  isSidebar,
+  total,
+}: {
+  isSidebar: boolean;
+  total: number;
+}) {
   const user = useSelector((state: RootState) => state.user.data);
   const items = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
@@ -52,7 +58,6 @@ export function CardsPaymentMethod({ isSidebar, total }: { isSidebar: boolean, t
     mode: "onChange",
   });
 
-
   useEffect(() => {
     const load = async () => {
       await dispatch(fetchUserDetails());
@@ -61,21 +66,26 @@ export function CardsPaymentMethod({ isSidebar, total }: { isSidebar: boolean, t
     load();
   }, []);
 
-
   useEffect(() => {
     // Watch form fields to trigger validation
     watch();
   }, [watch]);
 
   if (!user) {
-    return <div className="flex-1 flex justify-center items-center">user not foud</div>;
+    return (
+      <div className="flex-1 flex justify-center items-center">
+        user not foud
+      </div>
+    );
   }
 
   const onSubmit = async (data: FormData) => {
-    navigate("/home");
     if (isSidebar) {
       dispatch(toggle());
+    } else {
+      navigate("/home");
     }
+
     await dispatch(clearMyCartAsyc());
     await dispatch(fetchCartItems());
     await dispatch(placeOrder({ userId: user._id, total, orderItems: items }));
@@ -83,7 +93,7 @@ export function CardsPaymentMethod({ isSidebar, total }: { isSidebar: boolean, t
   };
 
   return (
-    <Card className="dark:bg-[#1F1F1F]">
+    <Card className="">
       <CardHeader>
         <CardTitle>Payment Method</CardTitle>
         <CardDescription>Select a payment method</CardDescription>

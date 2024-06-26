@@ -34,14 +34,14 @@ const ProductDetails = () => {
   }, [id]);
 
   return (
-    <div className="w-full h-screen flex flex-col items-center dark:bg-[#1F1F1F] no-scrollbar relative">
+    <div className="w-full h-screen flex flex-col items-center no-scrollbar relative">
       <Navbar />
 
       {!product ? (
         <div className="flex-1">Invalid product ID</div>
       ) : (
         <div className="flex-1 w-full px-10 py-20 sm:px-20 flex flex-col md:flex-row gap-16 items-center font-sg ">
-          <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] aspect-square rounded-lg overflow-clip shadow-2xl">
+          <div className="w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] aspect-square rounded-lg overflow-clip shadow-2xl dark:shadow-slate-600 dark:opacity-80">
             <CustomImage url={product.image} />
           </div>
           <div className="w-full flex flex-col gap-5 self-start">

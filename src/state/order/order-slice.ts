@@ -45,7 +45,7 @@ export const orderSlice = createSlice({
                 // toast.success('orders fetched');
             }).addCase(fetchOrderItems.fulfilled, (state, action) => {
                 state.orderItems = action.payload;
-                toast.success('order items fetched');
+                // toast.success('order items fetched');
             });
 
     }

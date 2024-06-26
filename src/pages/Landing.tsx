@@ -4,11 +4,12 @@ import HeroImage from "../assets/images/shopping.svg";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "@/components/Footer";
 
 const Landing = () => {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center dark:bg-[#1F1F1F] no-scrollbar font-sg">
+    <div className="w-full h-screen flex flex-col justify-center items-center no-scrollbar font-sg">
       <Navbar />
       <div className="flex-1 mx-20 flex justify-center items-center">
         <div className="flex-1 flex flex-col sm:flex-row gap-20 justify-center items-center">
@@ -33,6 +34,8 @@ const Landing = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

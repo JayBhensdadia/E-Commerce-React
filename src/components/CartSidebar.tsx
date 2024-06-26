@@ -62,7 +62,7 @@ const CartSidebar = () => {
         )}
 
         {items.map((item) => {
-          return <CartItem cartItem={item} />;
+          return <CartItem key={item.productId} cartItem={item} />;
         })}
 
         {items.length !== 0 && (

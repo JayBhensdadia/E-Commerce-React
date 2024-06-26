@@ -1,30 +1,77 @@
 import { useScrollTop } from "@/hooks/scroll-to-top";
 import { cn } from "@/lib/utils";
-import { ShoppingCartIcon, User } from "lucide-react";
+import { changeContent, toggle } from "@/state/sidebar/sidebar-slice";
+import { AppDispatch, RootState } from "@/state/store";
+import { House, Mail, ShoppingBag, ShoppingCartIcon, User } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "./ui/button";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/state/store";
-import { changeContent, toggle } from "@/state/sidebar/sidebar-slice";
-import { Input } from "./ui/input";
-import { useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { NavLinksDropDown } from "./NavLinksDropdown";
 
 const Navbar = () => {
   const items = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
-  const scrolled = useScrollTop();
-  const { id } = useParams();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <div
       className={cn(
-        "z-50 bg-background dark:bg-[#1F1F1F] flex justify-between items-center w-full p-6",
-        scrolled && "border-b shadow-sm dark:shadow-sm"
+        "z-50 bg-background flex justify-between items-center w-full p-6 border-b shadow-sm dark:shadow-sm"
       )}
     >
-      <div className="text-2xl capitalize font-sgb flex gap-10">
-        <p>Haatdi</p>
+      <div className="flex flex-row sm:gap-7 gap-3 items-center">
+        <div className="text-2xl capitalize font-sgb flex gap-10">
+          <a href="/">Haatdi</a>
+        </div>
+
+        <div className="sm:flex flex-row gap-5 font-sg hidden">
+          <Link
+            to="/home"
+            className={cn(
+              currentPath === "/home" && "bg-slate-300 dark:text-slate-950",
+              "border-2 px-2 rounded-lg py-1"
+            )}
+          >
+            <div className="flex gap-1 items-center justify-center">
+              <House className="w-5 h-5" />
+              <p>home</p>
+            </div>
+          </Link>
+          <Link
+            to="/orders"
+            className={cn(
+              currentPath === "/orders" && "bg-slate-300 dark:text-slate-950",
+              "border-2 px-2 rounded-lg py-1"
+            )}
+          >
+            <div className="flex gap-1 items-center">
+              <ShoppingBag className="w-5 h-5" />
+              <p>My Orders</p>
+            </div>
+          </Link>
+
+          <Link
+            to="/contact"
+            className={cn(
+              currentPath === "/contact" && "bg-slate-300 dark:text-slate-950",
+              "border-2 px-2 rounded-lg py-1"
+            )}
+          >
+            <div className="flex gap-1 items-center justify-center">
+              <Mail className="w-5 h-5" />
+
+              <p>Contact Us</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className="sm:hidden">
+          <NavLinksDropDown />
+        </div>
       </div>
+
       <div className="flex gap-3 items-center">
         <ModeToggle />
         <div className="relative">

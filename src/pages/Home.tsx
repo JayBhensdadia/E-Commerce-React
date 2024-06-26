@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   return (
-    <div className="w-full h-screen flex flex-col gap-5 items-center dark:bg-[#1F1F1F] no-scrollbar relative">
+    <div className="w-full h-screen flex flex-col gap-5 items-center no-scrollbar relative">
       <Navbar />
       <ProductList />
       <Footer />

@@ -64,7 +64,7 @@ const CartItem = ({ cartItem }: { cartItem: CartItem }) => {
   }
 
   return (
-    <div className="flex flex-row gap-2 relative border-2 rounded-md">
+    <div className="flex flex-col sm:flex-row gap-2 relative border-2 rounded-md items-center">
       {/* image */}
       <div className="w-24 h-24 rounded-md overflow-clip m-3">
         <CustomImage url={product.image} />

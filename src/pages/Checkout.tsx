@@ -19,6 +19,7 @@ import Payment from "../assets/images/payment.svg";
 import { useNavigate } from "react-router-dom";
 import LoginImage from "../assets/images/login.svg";
 import Footer from "@/components/Footer";
+import Sidebar from "@/components/Sidebar";
 
 const CheckoutPage = () => {
   const user = useSelector((state: RootState) => state.user.data);
@@ -65,32 +66,36 @@ const CheckoutPage = () => {
 
   if (!user) {
     return (
-      <div className="w-full h-screen flex flex-col justify-center items-center font-sg">
+      <div className="w-full min-h-screen flex flex-col justify-center items-center font-sg">
         <Navbar />
-        <div className="flex flex-col gap-10 justify-center items-center">
+        <div className="flex-1 flex flex-col gap-10 justify-center items-center">
           <img src={LoginImage} alt="" className="w-[350px]" />
-          <p className="text-5xl">Please Login</p>
+          <p className="text-5xl">Please Login!</p>
         </div>
+        <Footer />
+        <Sidebar />
       </div>
     );
   }
 
   return (
-    <div className="w-full h-screen flex flex-col p-4 font-sg">
+    <div className="w-full min-h-screen flex flex-col font-sg ">
       <Navbar />
-      <div className="md:mx-20 mt-[80px]">
-        <h1 className="text-5xl font-bold mb-4">Checkout</h1>
-
+      <div className="flex-1 flex justify-center items-center py-10">
         <div className="flex flex-col lg:flex-row gap-12">
           {/* image */}
-          <div className="hidden lg:block lg:w-[300px] justify-center self-start mt-7">
-            <img src={Payment} alt="" />
+          <div className="flex flex-col gap-5 items-center justify-center">
+            <div className="hidden lg:block lg:w-[300px] justify-center self-start mt-7">
+              <img src={Payment} alt="" />
+            </div>
+
+            <h1 className="text-3xl font-bold mb-4">Checkout</h1>
           </div>
 
           {/* order summary */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 p-2">
             <p className="pb-2">Order summary:</p>
-            <div className="h-[40%] p-2 flex flex-col overflow-scroll no-scrollbar">
+            <div className="flex-1 p-2 flex flex-col overflow-scroll no-scrollbar">
               {items.map((item) => (
                 <CartItem key={item.productId} cartItem={item} />
               ))}
@@ -113,9 +118,11 @@ const CheckoutPage = () => {
 
           {/* payment method */}
           <div className=" flex flex-col gap-3">
-
-            {total === null ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <CardsPaymentMethod isSidebar={false} total={total} />}
-
+            {total === null ? (
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <CardsPaymentMethod isSidebar={false} total={total} />
+            )}
 
             {/* <Button
               className="mb-32"
