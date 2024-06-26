@@ -94,14 +94,14 @@ export const cartSlice = createSlice({
         builder.addCase(syncCart.fulfilled, (state, action) => {
             // Clear local storage after syncing with database
             localStorage.removeItem('jb-cart');
-            toast.success('cart synced with database');
+            // toast.success('cart synced with database');
 
 
         }).addCase(fetchCartItems.fulfilled, (state, action) => {
 
             // Ensure to replace local items with the ones fetched from the server
             state.items = action.payload;
-            toast.success('database cart data loaded!');
+            // toast.success('database cart data loaded!');
 
 
         }).addCase(addToCartAsync.fulfilled, (state, action) => {

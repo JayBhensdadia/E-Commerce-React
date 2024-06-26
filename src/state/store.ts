@@ -5,6 +5,7 @@ import cartReducer from './cart/cart-slice';
 import userReducer from './user/user-slice';
 import authReducer from './auth/auth-slice';
 import purchaseSuccessReducer from './purchase-success/purchase-success-slice';
+import orderReducer from './order/order-slice';
 
 //redux store configurations
 export const store = configureStore({
@@ -14,7 +15,8 @@ export const store = configureStore({
         cart: cartReducer,
         user: userReducer,
         auth: authReducer,
-        purchaseSuccess: purchaseSuccessReducer
+        purchaseSuccess: purchaseSuccessReducer,
+        order: orderReducer
     }
 });
 

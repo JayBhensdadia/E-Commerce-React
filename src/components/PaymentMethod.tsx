@@ -1,4 +1,4 @@
-import { AppDispatch } from "@/state/store";
+import { AppDispatch, RootState } from "@/state/store";
 import { Banknote, ScrollText, Truck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -16,12 +16,14 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { toggle } from "@/state/sidebar/sidebar-slice";
-import { clearMyCartAsyc } from "@/state/user/user-slice";
+import { clearMyCartAsyc, fetchUserDetails } from "@/state/user/user-slice";
 import { fetchCartItems } from "@/state/cart/cart-slice";
 import { togglePurchaseSuccess } from "@/state/purchase-success/purchase-success-slice";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSelector } from "react-redux";
+import { placeOrder } from "@/state/order/order-slice";
 
 const formSchema = z.object({
   name: z.string().nonempty("Name cannot be empty"),
@@ -34,7 +36,9 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function CardsPaymentMethod({ isSidebar }: { isSidebar: boolean }) {
+export function CardsPaymentMethod({ isSidebar, total }: { isSidebar: boolean, total: number; }) {
+  const user = useSelector((state: RootState) => state.user.data);
+  const items = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -48,10 +52,24 @@ export function CardsPaymentMethod({ isSidebar }: { isSidebar: boolean }) {
     mode: "onChange",
   });
 
+
+  useEffect(() => {
+    const load = async () => {
+      await dispatch(fetchUserDetails());
+      await dispatch(fetchCartItems());
+    };
+    load();
+  }, []);
+
+
   useEffect(() => {
     // Watch form fields to trigger validation
     watch();
   }, [watch]);
+
+  if (!user) {
+    return <div className="flex-1 flex justify-center items-center">user not foud</div>;
+  }
 
   const onSubmit = async (data: FormData) => {
     navigate("/home");
@@ -60,6 +78,7 @@ export function CardsPaymentMethod({ isSidebar }: { isSidebar: boolean }) {
     }
     await dispatch(clearMyCartAsyc());
     await dispatch(fetchCartItems());
+    await dispatch(placeOrder({ userId: user._id, total, orderItems: items }));
     dispatch(togglePurchaseSuccess());
   };
 

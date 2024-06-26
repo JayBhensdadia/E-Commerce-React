@@ -113,7 +113,9 @@ const CheckoutPage = () => {
 
           {/* payment method */}
           <div className=" flex flex-col gap-3">
-            <CardsPaymentMethod isSidebar={false} />
+
+            {total === null ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <CardsPaymentMethod isSidebar={false} total={total} />}
+
 
             {/* <Button
               className="mb-32"

@@ -96,7 +96,7 @@ const CheckoutSidebar = () => {
         </div>
 
         <div className="mb-32">
-          <CardsPaymentMethod isSidebar={true} />
+          {total === null ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <CardsPaymentMethod isSidebar={false} total={total} />}
         </div>
 
         {/* <Button
