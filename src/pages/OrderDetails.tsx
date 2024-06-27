@@ -32,7 +32,7 @@ const OrderDetails = () => {
   }, [id]);
 
   useEffect(() => {
-    const getProduct = async ({ id }: { id: string }) => {
+    const getProduct = async ({ id }: { id: string; }) => {
       console.log("fetching product from server");
 
       try {
@@ -77,30 +77,38 @@ const OrderDetails = () => {
 
         {/* <p>{JSON.stringify(items)}</p> */}
 
-        {items.map((item) => {
-          return (
-            <button
-              key={item._id}
-              className="flex flex-row gap-2 relative border-2 rounded-md justify-start items-center max-w-[500px] hover:scale-105 transition-transform cursor-pointer text-left"
-              onClick={() => {
-                navigate(`/${item._id}`);
-              }}
-            >
-              <div className="w-24 h-24 sm:w-40 sm:h-40 rounded-md overflow-clip m-3">
-                <CustomImage url={item.image} />
-              </div>
 
-              <div className="flex flex-col py-2 gap-3">
-                <p>{item.name}</p>
-                <p className="font-sgb">$ {item.price}</p>
-                <p>
-                  Quantity:{" "}
-                  {orderItems.find((i) => i.productId === item._id)?.quantity}
-                </p>
-              </div>
-            </button>
-          );
-        })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+
+
+          {items.map((item) => {
+            return (
+              <button
+                key={item._id}
+                className="flex flex-row gap-2 relative border-2 rounded-md justify-start items-center max-w-[500px] hover:scale-105 transition-transform cursor-pointer text-left"
+                onClick={() => {
+                  navigate(`/${item._id}`);
+                }}
+              >
+                <div className="w-24 h-24 sm:w-40 sm:h-40 rounded-md overflow-clip m-3">
+                  <CustomImage url={item.image} />
+                </div>
+
+                <div className="flex flex-col py-2 gap-3">
+                  <p>{item.name}</p>
+                  <p className="font-sgb">$ {item.price}</p>
+                  <p>
+                    Quantity:{" "}
+                    {orderItems.find((i) => i.productId === item._id)?.quantity}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+
+
+        </div>
       </div>
       <Footer />
       <Sidebar />

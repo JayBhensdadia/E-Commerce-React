@@ -11,6 +11,8 @@ import UserSidebar from "@/components/UserSidebar";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
+import NoDataFound from '../assets/images/no-data-found.svg';
+import { cn } from "@/lib/utils";
 
 const Orders = () => {
   const orders = useSelector((state: RootState) => state.order.orders);
@@ -43,8 +45,23 @@ const Orders = () => {
   return (
     <div className="w-full h-screen flex flex-col gap-5 items-center no-scrollbar relative">
       <Navbar />
+
+      <div className={cn(
+        "lg:w-[300px] justify-center mt-7 self-center flex flex-col items-center gap-5",
+        orders.length !== 0 && 'bg-yellow-200 hidden'
+      )}>
+
+        <img src={NoDataFound} alt="" />
+        <p className="text-3xl font-sg">No Data Found!</p>
+      </div>
       <div className="flex-1 w-full px-10 flex flex-col font-sg gap-5">
-        <p className="text-3xl font-sgmb">Order History</p>
+        <p className={cn(
+          "text-3xl font-sgmb",
+          orders.length === 0 && 'hidden'
+        )}>Order History</p>
+
+
+
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {orders.map((item) => {

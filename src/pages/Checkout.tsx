@@ -95,7 +95,7 @@ const CheckoutPage = () => {
           {/* order summary */}
           <div className="flex flex-col gap-2 p-2">
             <p className="pb-2">Order summary:</p>
-            <div className="flex-1 p-2 flex flex-col overflow-scroll no-scrollbar">
+            <div className="flex-1 max-h-[500px] p-2 flex flex-col overflow-scroll no-scrollbar">
               {items.map((item) => (
                 <CartItem key={item.productId} cartItem={item} />
               ))}
