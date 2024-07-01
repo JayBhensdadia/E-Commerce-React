@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "sonner";
+import { syncCart } from "../cart/cart-slice";
 
 
 interface User {
@@ -151,6 +152,7 @@ export const loginUser = createAsyncThunk(
                 withCredentials: true
             });
             await dispatch(fetchUserDetails());
+            await dispatch(syncCart());
         } catch (error) {
             console.log(error);
             throw error;

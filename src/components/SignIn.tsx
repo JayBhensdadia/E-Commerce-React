@@ -33,8 +33,9 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/state/store";
 import { toast } from "sonner";
 import { loginUser } from "@/state/user/user-slice";
-import { toggleAuth } from "@/state/auth/auth-slice";
+import { changeAuthContent, toggleAuth } from "@/state/auth/auth-slice";
 import { useToast } from "./ui/use-toast";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -124,6 +125,13 @@ const SignIn = () => {
           )}
         </form>
       </Form>
+
+      <div className="flex gap-2 justify-center items-center">
+        <p>Don't have an account ? </p>
+        <Button variant='link' onClick={() => {
+          dispatch(changeAuthContent('signup'));
+        }}>SignUp</Button>
+      </div>
     </DialogContent>
   );
 };

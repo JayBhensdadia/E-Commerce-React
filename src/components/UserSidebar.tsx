@@ -47,12 +47,12 @@ const UserSidebar = () => {
 
         <div className="w-full flex gap-6 justify-start text-sm">
           <p className=" text-slate-500">created-at</p>
-          <p>{!user ? "N/A" : user.createdAt?.toString()}</p>
+          <p>{!user ? "N/A" : new Date(user.createdAt?.toString() ?? "").toLocaleDateString()}</p>
         </div>
 
         <div className="w-full flex gap-6 justify-start text-sm">
-          <p className=" text-slate-500">created-at</p>
-          <p>{!user ? "N/A" : user.updatedAt?.toString()}</p>
+          <p className=" text-slate-500">updated-at</p>
+          <p>{!user ? "N/A" : new Date(user.updatedAt?.toString() ?? "").toLocaleDateString()}</p>
         </div>
 
         {!user ? (

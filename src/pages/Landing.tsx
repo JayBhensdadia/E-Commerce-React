@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
+import Sidebar from "@/components/Sidebar";
+import AuthDialog from "@/components/AuthDialog";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -36,6 +38,8 @@ const Landing = () => {
       </div>
 
       <Footer />
+      <Sidebar />
+      <AuthDialog />
     </div>
   );
 };
